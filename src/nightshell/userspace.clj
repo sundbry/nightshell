@@ -1,4 +1,4 @@
-(ns nightrepl.userspace
+(ns nightshell.userspace
   (:require 
     [cemerick.pomegranate :as pomegranate]
     [leiningen.core.project :as project]

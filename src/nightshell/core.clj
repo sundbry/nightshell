@@ -1,4 +1,4 @@
-(ns nightrepl.core
+(ns nightshell.core
   (:require [nightcode.customizations :as custom]
             [nightcode.editors :as editors]
             [nightcode.shortcuts :as shortcuts]
@@ -7,13 +7,13 @@
             [nightcode.lein :as lein]
             [nightcode.utils :as utils]
             [nightcode.sandbox :as sandbox]
-            [nightrepl.redl :as redl]
-            [nightrepl.debug :as debug]
+            [nightshell.redl :as redl]
+            [nightshell.debug :as debug]
             [seesaw.core :as s]
             [clj-stacktrace.repl :as strace]
-            [clj-stacktrace.core :refer [parse-trace-elem]]
-            [cemerick.pomegranate :as pomegranate])
-  (:gen-class))
+            [clj-stacktrace.core :refer [parse-trace-elem]])
+  ;(:gen-class)
+  )
 
 (defn- get-console-text-area
   [console]

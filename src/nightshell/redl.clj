@@ -1,4 +1,4 @@
-(ns nightrepl.redl
+(ns nightshell.redl
   (:require clojure.main
             reply.hacks.printing
             [clojure.string :as str]
