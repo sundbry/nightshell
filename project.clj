@@ -1,0 +1,12 @@
+(defproject nightrepl "0.0.1-SNAPSHOT"
+  :description "FIXME: write description"
+  :dependencies [[nightcode "0.3.11-SNAPSHOT"]
+                 [org.clojure/clojure "1.6.0"]
+                 [org.clojure/core.async "0.1.338.0-5c5012-alpha"]
+                 [org.clojure/tools.namespace "0.2.5"]
+                 [seesaw "1.4.4"]
+                 [com.cemerick/pomegranate "0.3.0"]]
+  :uberjar-exclusions [#"clojure-clr.*\.zip"]
+  :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
+  ;:aot [nightrepl.core]
+  :main nightrepl.core)
