@@ -1,6 +1,6 @@
 (ns nightshell.redl
   (:require clojure.main
-            ;reply.hacks.printing
+            reply.hacks.printing
             [clojure.string :as str]
             [clojure.core.async :as async]
             clojure.stacktrace

@@ -9,6 +9,15 @@
   []
   (core-project/read))
 
+(defn initializer! 
+  [proj]
+  (let [main-ns (:main proj)]
+    (fn []
+      (when main-ns
+        (require main-ns)
+        (ns main-ns)))))
+      
+
 #_(defn initializer! 
   [proj]
   (let [cpaths (get-classpath proj)

@@ -63,7 +63,7 @@
   (let [console (editors/create-console "clj")
         stack-pane (create-stack-pane thread-context)
         repl-pane (create-repl-pane console)
-        frame (s/frame :title "Nightrepl [breakpoint]"
+        frame (s/frame :title "Nightshell [breakpoint]"
                        :content (s/top-bottom-split stack-pane repl-pane)
                        :on-close :nothing ; can not close break point windows
                        :size [800 :by 300])]
@@ -87,7 +87,7 @@
   []
   (let [console (editors/create-console "clj")
         pane (create-repl-pane console)
-        frame (s/frame :title "Nightrepl"
+        frame (s/frame :title "Nightshell"
                        :content pane
                        :on-close :exit ; can not close break point windows
                        :size [800 :by 600])]

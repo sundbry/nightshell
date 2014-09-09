@@ -7,7 +7,7 @@
   <name>nightshell</name>
   <description>A debug repl derived from Nightcode and REDL</description>
   <scm>
-    <tag>13d6717fe01540ed61e0a33d504e02897c19f5b1
+    <tag>53fb5876fd9b8a1bda9ce72ee7208b218f93de4a
 </tag>
     <url/>
   </scm>
@@ -63,11 +63,6 @@
       <groupId>org.clojure</groupId>
       <artifactId>core.async</artifactId>
       <version>0.1.338.0-5c5012-alpha</version>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>tools.namespace</artifactId>
-      <version>0.2.5</version>
     </dependency>
     <dependency>
       <groupId>seesaw</groupId>

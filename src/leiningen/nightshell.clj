@@ -13,7 +13,7 @@
                   ['seesaw "1.4.4"]                  
                   ['com.cemerick/pomegranate "0.3.0"]]})
 
-(defn nightshell-ui
+(defn nightshell
   "Launch nightshell and load breakpoint code into the project."
   [project & args]
   (let [profile (or (:nightshell (:profiles project)) nsh-profile)
@@ -22,7 +22,7 @@
                        `(nightshell.core/-main)
                        `(require 'nightshell.core))))
 
-(defn nightshell
+#_(defn nightshell
   "Launch nightshell and load breakpoint code into the project."
   [project & args]
   (let [profile (or (:nightshell (:profiles project)) nsh-profile)

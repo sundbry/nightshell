@@ -8,6 +8,7 @@
                  [com.cemerick/pomegranate "0.3.0"]]
   ;:uberjar-exclusions [#"clojure-clr.*\.zip"]
   ;:javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
-  ;:aot [nightshell.core]
+  :aot []
   ;:main nightshelll.core)
-  :eval-in-leiningen true)
+  ;:eval-in-leiningen true
+  )

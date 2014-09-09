@@ -46,7 +46,7 @@
 
 (defn- initialize-state
   [repl-handle]
-  (redl/repl-eval-form repl-handle '(use '[nightshell.redl :only ['break 'continue]]))
+  (redl/repl-eval-form repl-handle '(use '[nightshell.redl :only [break continue]]))
   (let [result (redl/repl-eval-form repl-handle nil)]
     (select-keys result [:ns :repl-depth])))
 
@@ -68,8 +68,9 @@
   "Start a debug repl"
   []
   (let [project (user/project)
+        main-ns (or (:main project) 'user)
         handle (redl/make-repl (:main project))
-        initializer! #() ;(user/initializer! project)]
+        initializer! (user/initializer! project)]
     (attach-repl handle initializer!)))
 
 (defn breakpoint-repl
