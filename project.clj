@@ -10,5 +10,5 @@
   ;:javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
   :aot []
   ;:main nightshelll.core)
-  ;:eval-in-leiningen true
+  :eval-in-leiningen true
   )

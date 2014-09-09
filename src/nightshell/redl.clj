@@ -266,11 +266,12 @@
     (if (= "nightshell.redl$eval_with_locals" (.getClassName ste))
       (rest stack-trace)
       (recur (rest stack-trace)))
-    []))
+    nil))
 
 (defn- truncate-stack-trace-bottom
   [stack-trace]
-  (reverse (truncate-reverse-stack-bottom (reverse stack-trace))))
+  (when-let [bottom (truncate-reverse-stack-bottom (reverse stack-trace))]
+    (reverse bottom)))
 
 (defn- truncate-stack-trace-top
   [stack-trace]
@@ -282,9 +283,11 @@
 
 (defn- truncate-stack-trace
   [stack-trace]
-  (-> stack-trace
-    truncate-stack-trace-top
-    truncate-stack-trace-bottom))
+  (let [bottom (-> stack-trace truncate-stack-trace-top)
+        middle (-> bottom truncate-stack-trace-bottom)]
+    (if (some? middle) ; if we truncated off the bottom
+      middle
+      bottom)))
 
 (defn- thread-context
   [thread]
@@ -316,20 +319,19 @@
   can return into the parent repl at any time. Must supply
   locals, that will be in scope in the new subrepl."
   [locals]
-  (when-not (bound? #'*repl-output*)
-    (throw (ex-info "You cannot call break outside of a REDL repl." {})))
-  (try
+  (if-let [break-interact @spawn-repl-window]
     (binding [*repl-depth* (inc *repl-depth*)
               *repl-continue* (async/chan)]
       (let [break-repl (eval-supervisor
                          {:ns (ns-name *ns*)
                           :*1 *1 :*2 *2 :*3 *3 :*e *e}
                          locals)]
-        (@spawn-repl-window break-repl (thread-context (Thread/currentThread)))
+        (break-interact break-repl (thread-context (Thread/currentThread)))
         (let [result (async/<!! *repl-continue*)]    
           (if (some? (:exception result))
             (throw (:exception result))
-            (:value result)))))))
+            (:value result)))))
+    ::no-arg))
 
 (defmacro break
   "Invoke this to drop into a new sub-repl. It will automatically capture

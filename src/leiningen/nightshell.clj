@@ -4,7 +4,7 @@
     [leiningen.core.eval :refer [eval-in-project]]
     [leiningen.repl :as lein-repl]))
 
-(def ^:private nsh-profile
+#_(def ^:private nsh-profile
   {:dependencies [['sundbry/nightshell "0.1.0-SNAPSHOT"]
                   ['nightcode "0.3.11-SNAPSHOT"]
                   ;[org.clojure/clojure "1.6.0"]
@@ -12,6 +12,9 @@
                   ['org.clojure/tools.namespace "0.2.5"]
                   ['seesaw "1.4.4"]                  
                   ['com.cemerick/pomegranate "0.3.0"]]})
+
+(def ^:private nsh-profile
+  {:dependencies [['sundbry/nightshell "0.1.0-SNAPSHOT"]})
 
 (defn nightshell
   "Launch nightshell and load breakpoint code into the project."

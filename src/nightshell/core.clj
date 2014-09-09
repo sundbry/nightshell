@@ -10,6 +10,7 @@
             [nightshell.redl :as redl]
             [nightshell.debug :as debug]
             [seesaw.core :as s]
+            clojure.stacktrace
             [clj-stacktrace.repl :as strace]
             [clj-stacktrace.core :refer [parse-trace-elem]]))
 
@@ -50,7 +51,9 @@
   [thread-context]
   (let [stack-console (editors/create-console "clj")
         [stack-in stack-out] (ui/get-io! stack-console)]
-    (strace/pst-elems-on stack-out false (map parse-trace-elem (:stack-trace thread-context)))
+    (binding [*out* stack-out]
+      (println (count (:stack-trace thread-context))))  
+    ;(strace/pst-elems-on stack-out false (map parse-trace-elem (:stack-trace thread-context)))
     (doto (get-console-text-area stack-console)
       (.setReadOnly true)
       (.disable))
@@ -68,7 +71,7 @@
                        :on-close :nothing ; can not close break point windows
                        :size [800 :by 300])]
     (start-repl-pane repl-pane console repl-handle #(s/dispose! frame))
-    (doto frame
+    #_(doto frame
       ; set various window properties
       window/enable-full-screen!
       window/add-listener!)
@@ -78,8 +81,8 @@
   [repl-handle thread-context]
   (s/invoke-later
     (do
-      (let [[root stack console] (create-break-window repl-handle thread-context)]
-        (s/show! root)
+      (let [[win stack console] (create-break-window repl-handle thread-context)]                
+        (s/show! win)
         (s/scroll! stack :to :top)
         (s/request-focus! (get-console-text-area console))))))
 
@@ -98,6 +101,21 @@
       window/add-listener!)
     [frame]))
 
+(defn enable
+  []  
+  (swap! ui/root
+         (fn [cur-root]
+           (if (nil? cur-root)
+             (s/frame)
+             cur-root))) 
+  (reset! redl/spawn-repl-window spawn-break-window)
+  true)
+
+(defn disable
+  []
+  (reset! redl/spawn-repl-window nil)
+  false)
+
 (defn -main [& args]
   ; listen for keys while modifier is down
   (shortcuts/listen-for-shortcuts!
@@ -110,8 +128,7 @@
   ; this will give us a nice dark theme by default, or allow a lighter theme
   ; by adding "-s light" to the command line invocation
   (window/set-theme! (custom/parse-args args))
-  ; create and display the window
-  ; it's important to save the window in the ui/root atom
-  (reset! redl/spawn-repl-window spawn-break-window)
+  (reset! ui/root (first (create-root-window)))
+  (enable)
   (s/invoke-later
-    (s/show! (reset! ui/root (first (create-root-window))))))
+    (s/show! @ui/root)))
