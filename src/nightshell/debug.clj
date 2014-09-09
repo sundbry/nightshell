@@ -1,6 +1,5 @@
 (ns nightshell.debug
   (:require [nightcode.editors :as editors]
-            [nightcode.lein :as lein]
             [nightcode.sandbox :as sandbox]
             [nightcode.shortcuts :as shortcuts]
             [nightcode.ui :as ui]
@@ -47,6 +46,7 @@
 
 (defn- initialize-state
   [repl-handle]
+  (redl/repl-eval-form repl-handle '(use '[nightshell.redl :only ['break 'continue]]))
   (let [result (redl/repl-eval-form repl-handle nil)]
     (select-keys result [:ns :repl-depth])))
 
@@ -64,18 +64,12 @@
                        :print (partial debug-print debug-repl))]
       outer-repl)))
 
-(defn- ns-init
-  []
-  (use '[nightrepl.redl :only [break continue]]))
-
 (defn repl
   "Start a debug repl"
   []
-  (let [handle (redl/make-repl)
-        user-init (user/initializer! handle)
-        initializer! (fn []
-                       (user-init)                      
-                       (ns-init))]
+  (let [project (user/project)
+        handle (redl/make-repl (:main project))
+        initializer! #() ;(user/initializer! project)]
     (attach-repl handle initializer!)))
 
 (defn breakpoint-repl

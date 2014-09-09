@@ -4,26 +4,23 @@
             [nightcode.shortcuts :as shortcuts]
             [nightcode.ui :as ui]
             [nightcode.window :as window]
-            [nightcode.lein :as lein]
             [nightcode.utils :as utils]
             [nightcode.sandbox :as sandbox]
+            [nightshell.thread :refer [start-thread!]]
             [nightshell.redl :as redl]
             [nightshell.debug :as debug]
             [seesaw.core :as s]
             [clj-stacktrace.repl :as strace]
-            [clj-stacktrace.core :refer [parse-trace-elem]])
-  ;(:gen-class)
-  )
+            [clj-stacktrace.core :refer [parse-trace-elem]]))
 
 (defn- get-console-text-area
   [console]
   (.getView (.getViewport console)))
 
 (defn- run-repl!
-  "Starts a REPL process."
-  [process in-out repl-handle end-callback]
-  (lein/stop-process! process)
-  (lein/start-thread! in-out 
+  "Starts a REPL thread."
+  [in-out repl-handle end-callback]
+  (start-thread! in-out 
                       (if repl-handle
                         (debug/breakpoint-repl repl-handle)
                         (debug/repl))
@@ -39,10 +36,9 @@
 
 (defn- start-repl-pane
   [pane console repl-handle repl-terminate-callback]
-  (let [process (atom nil)
-        run! (fn [& _]
-               (s/request-focus! (get-console-text-area console))
-               (run-repl! process (ui/get-io! console) repl-handle repl-terminate-callback))]
+  (letfn [(run! [& _]
+                (s/request-focus! (get-console-text-area console))
+                (run-repl! (ui/get-io! console) repl-handle repl-terminate-callback))]
     ; start the repl
     (run!)
     ; create a shortcut to restart the repl

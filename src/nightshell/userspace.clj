@@ -1,21 +1,20 @@
 (ns nightshell.userspace
   (:require 
-    [cemerick.pomegranate :as pomegranate]
-    [leiningen.core.project :as project]
+    #_[cemerick.pomegranate :as pomegranate]
+    [leiningen.core.project :as core-project]
     [leiningen.core.classpath :refer [get-classpath]]
-    [clojure.tools.namespace.repl :as ns-repl]))
+    #_[clojure.tools.namespace.repl :as ns-repl]))
 
-(defn initializer! 
-  [handle]
-  (let [path "."
-        proj (project/read)
-        cpaths (get-classpath proj)
-        refresh-dirs (:source-paths proj)
-        main-ns (:main proj)]
+(defn project
+  []
+  (core-project/read))
+
+#_(defn initializer! 
+  [proj]
+  (let [cpaths (get-classpath proj)
+        refresh-dirs (:source-paths proj)]
     (fn []  
       (doseq [cpath cpaths]
         (pomegranate/add-classpath cpath))
-      ;(require '[clojure.tools.namespace.repl])
       (apply ns-repl/set-refresh-dirs refresh-dirs)
-      (ns-repl/refresh-all)
-      (ns main-ns))))
+      (ns-repl/refresh-all))))

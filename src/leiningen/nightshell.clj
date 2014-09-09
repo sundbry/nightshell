@@ -1,7 +1,8 @@
 (ns leiningen.nightshell
   (:require
     [leiningen.core.project :as proj]
-    [leiningen.core.eval :refer [eval-in-project]]))
+    [leiningen.core.eval :refer [eval-in-project]]
+    [leiningen.repl :as lein-repl]))
 
 (def ^:private nsh-profile
   {:dependencies [['sundbry/nightshell "0.1.0-SNAPSHOT"]
@@ -12,11 +13,21 @@
                   ['seesaw "1.4.4"]                  
                   ['com.cemerick/pomegranate "0.3.0"]]})
 
-(defn nightshell
+(defn nightshell-ui
   "Launch nightshell and load breakpoint code into the project."
   [project & args]
   (let [profile (or (:nightshell (:profiles project)) nsh-profile)
         project (proj/merge-profiles project [profile])]
       (eval-in-project project 
                        `(nightshell.core/-main)
-                       '(require 'nightshell.core))))
+                       `(require 'nightshell.core))))
+
+(defn nightshell
+  "Launch nightshell and load breakpoint code into the project."
+  [project & args]
+  (let [profile (or (:nightshell (:profiles project)) nsh-profile)
+        project (proj/merge-profiles project [profile])]
+    (lein-repl/repl project)))
+      ;(eval-in-project project 
+       ;                `(nightshell.core/-main)
+        ;               `(require 'nightshell.core))))

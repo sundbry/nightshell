@@ -1,6 +1,6 @@
 (ns nightshell.redl
   (:require clojure.main
-            reply.hacks.printing
+            ;reply.hacks.printing
             [clojure.string :as str]
             [clojure.core.async :as async]
             clojure.stacktrace
@@ -239,10 +239,8 @@
       id)))
 
 (defn make-repl
-  ([]
-    (make-repl 'user))
-  ([ns]
-    (eval-supervisor ns)))
+  [ns]
+  (eval-supervisor ns))
 
 (defn repl-eval-form
   "Takes a repl id and a form, and evaluates that form on the given repl."
@@ -265,7 +263,7 @@
 (defn- truncate-reverse-stack-bottom
   [stack-trace]
   (if-let [ste (first stack-trace)]
-    (if (= "nightrepl.redl$eval_with_locals" (.getClassName ste))
+    (if (= "nightshell.redl$eval_with_locals" (.getClassName ste))
       (rest stack-trace)
       (recur (rest stack-trace)))
     []))
@@ -277,7 +275,7 @@
 (defn- truncate-stack-trace-top
   [stack-trace]
   (if-let [ste (first stack-trace)]
-    (if (= "nightrepl.redl$break_with_window_STAR_" (.getClassName ste))
+    (if (= "nightshell.redl$break_with_window_STAR_" (.getClassName ste))
       (rest stack-trace)
       (recur (rest stack-trace)))
     []))
