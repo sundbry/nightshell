@@ -7,7 +7,7 @@
   <name>nightshell</name>
   <description>A debug repl derived from Nightcode and REDL</description>
   <scm>
-    <tag>2d24efd6229e75544386c49b45f23aa2b65068a8
+    <tag>2a5a1e9cd1265634b637daa10d48d53aa0408585
 </tag>
     <url/>
   </scm>
@@ -61,6 +61,11 @@
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.6.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojure</groupId>
       <artifactId>core.async</artifactId>
       <version>0.1.338.0-5c5012-alpha</version>
     </dependency>
@@ -70,9 +75,9 @@
       <version>1.4.4</version>
     </dependency>
     <dependency>
-      <groupId>com.cemerick</groupId>
-      <artifactId>pomegranate</artifactId>
-      <version>0.3.0</version>
+      <groupId>clj-stacktrace</groupId>
+      <artifactId>clj-stacktrace</artifactId>
+      <version>0.2.7</version>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>

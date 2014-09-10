@@ -14,7 +14,7 @@
                   ['com.cemerick/pomegranate "0.3.0"]]})
 
 (def ^:private nsh-profile
-  {:dependencies [['sundbry/nightshell "0.1.0-SNAPSHOT"]})
+  {:dependencies [['sundbry/nightshell "0.1.0-SNAPSHOT"]]})
 
 (defn nightshell
   "Launch nightshell and load breakpoint code into the project."

@@ -1,6 +1,5 @@
 (ns nightshell.redl
-  (:require clojure.main
-            reply.hacks.printing
+  (:require reply.hacks.printing
             [clojure.string :as str]
             [clojure.core.async :as async]
             clojure.stacktrace
@@ -11,10 +10,16 @@
 
 (def spawn-repl-window (atom nil))
 
-(defn- dbg
-  [& strs]
-  (.println System/out (str/join " " strs))
+#_(defn dbg
+  [& vals]
+  (.println (System/out) "<DEBUG>")
+  (doseq [val vals]
+    (.println (java.lang.System/out) (str val))
+    (.flush System/out))
+  (.println (System/out) "</DEBUG>")
   (.flush System/out))
+
+(defn dbg [& vals] nil)
 
 (def pretty-print
   "DEPRPECATED; set `print-fn` directly.
@@ -284,10 +289,13 @@
 (defn- truncate-stack-trace
   [stack-trace]
   (let [bottom (-> stack-trace truncate-stack-trace-top)
-        middle (-> bottom truncate-stack-trace-bottom)]
-    (if (some? middle) ; if we truncated off the bottom
-      middle
-      bottom)))
+        middle (-> bottom truncate-stack-trace-bottom)
+        trunc (if (some? middle) ; if we truncated off the bottom
+                middle
+                bottom)]
+    (dbg "truncate-stack-trace:")
+    (apply dbg trunc)
+    trunc))
 
 (defn- thread-context
   [thread]
