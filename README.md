@@ -6,7 +6,10 @@ A graphical debug repl derived from Nightcode and REDL
 ## Installation
 
 Download from git and install into your local Maven repository.
-Add [sundbry/nightshell "0.1.0-SNAPSHOT"] as a project dependency.
+Add it as a project dependency:
+```clj
+[sundbry/nightshell "0.1.0-SNAPSHOT"] 
+```
 
 ## Usage
 
