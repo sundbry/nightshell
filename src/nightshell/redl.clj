@@ -293,8 +293,6 @@
         trunc (if (some? middle) ; if we truncated off the bottom
                 middle
                 bottom)]
-    (dbg "truncate-stack-trace:")
-    (apply dbg trunc)
     trunc))
 
 (defn- thread-context
@@ -302,7 +300,7 @@
   {:thread thread
    :stack-trace (truncate-stack-trace (.getStackTrace thread))})
 
-#_(defn break*
+#_(defn break-in-repl*
   "Invoke this to drop into a new sub-repl, which
   can return into the parent repl at any time. Must supply
   locals, that will be in scope in the new subrepl."
@@ -322,12 +320,26 @@
       (assert (contains? (ex-data ex) ::continue))
       (::continue (ex-data ex)))))
 
+(defmacro macro-eval
+  [expr]
+  `(try 
+     {:value ~expr}
+     (catch Throwable e#
+       {:exception e#})))
+
+(defmacro macro-return
+  [result]
+  {:pre [(symbol? result)]} ; we enforce the precondition so it can be optimized out, instead of (let [result ...
+  `(if (some? (:exception ~result))
+            (throw (:exception ~result))
+            (:value ~result)))
+
 (defn break-with-window*
   "Invoke this to drop into a new sub-repl, which
   can return into the parent repl at any time. Must supply
   locals, that will be in scope in the new subrepl."
   [locals]
-  (if-let [break-interact @spawn-repl-window]
+  (when-let [break-interact @spawn-repl-window]
     (binding [*repl-depth* (inc *repl-depth*)
               *repl-continue* (async/chan)]
       (let [break-repl (eval-supervisor
@@ -336,10 +348,9 @@
                          locals)]
         (break-interact break-repl (thread-context (Thread/currentThread)))
         (let [result (async/<!! *repl-continue*)]    
-          (if (some? (:exception result))
-            (throw (:exception result))
-            (:value result)))))
-    ::no-arg))
+          (when-not (= ::no-arg result)
+            ; return nil iff no result from user interaction
+            (get locals `result)))))))
 
 (defmacro break
   "Invoke this to drop into a new sub-repl. It will automatically capture
@@ -348,13 +359,23 @@
   of break."
   ([]
    `(break nil))
-  ([value]
-   `(let [bindings# (local-bindings)
-          value# ~value
-          debug-result# (break-with-window* bindings#)]
-      (if (= debug-result# ::no-arg)
-        value#
-        debug-result#))))
+  ([expr]
+   `(let [initial-result# (macro-eval ~expr) ; returns {:value, :exception}
+          _# (prn "got initial result")
+          bindings# (merge
+                      (local-bindings)
+                      {(symbol "return") (fn [] (macro-return initial-result#))}) ; bind a fn to return the expr value
+          debug-result# (break-with-window* bindings#) ; returns result or nil
+          _# (prn "got debug result")
+          result# (or debug-result# initial-result#)] ; if debug-result was provided, else original result
+      (macro-return result#))))
+          
+(defmacro catch-break
+  "Invoke break only if we catch an exception on the forms"
+  [& forms]
+  `(try ~@forms
+    (catch Throwable e#
+      (break (throw e#)))))
 
 (defn continue*
   [value]
@@ -371,5 +392,5 @@
   `break` will return that value and discard the provided argument."
   ([]
    `(continue ::no-arg))
-  ([value]
-    `(continue* (try {:value ~value} (catch Throwable e# {:exception e#})))))
+  ([expr]
+    `(continue* (macro-eval ~expr))))
