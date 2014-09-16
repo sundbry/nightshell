@@ -7,9 +7,11 @@
   <name>nightshell</name>
   <description>A debug repl derived from Nightcode and REDL</description>
   <scm>
-    <tag>2a5a1e9cd1265634b637daa10d48d53aa0408585
+    <connection>scm:git:git://github.com/ryansundberg/nightshell.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/ryansundberg/nightshell.git</developerConnection>
+    <tag>f29cdc75935505ba10802dfaa12824f2de7b67b4
 </tag>
-    <url/>
+    <url>https://github.com/ryansundberg/nightshell</url>
   </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>

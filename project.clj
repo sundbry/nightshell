@@ -9,7 +9,7 @@
                  [clj-stacktrace "0.2.7"]]
   ;:uberjar-exclusions [#"clojure-clr.*\.zip"]
   ;:javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
-  :aot []
+  :aot :all
   ;:main nightshelll.core)
   :profiles {:dev {:source-paths ["dev"]}}
   )
