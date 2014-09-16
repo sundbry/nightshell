@@ -350,7 +350,7 @@
         (let [result (async/<!! *repl-continue*)]    
           (when-not (= ::no-arg result)
             ; return nil iff no result from user interaction
-            (get locals `result)))))))
+            result))))))
 
 (defmacro break
   "Invoke this to drop into a new sub-repl. It will automatically capture
@@ -361,12 +361,12 @@
    `(break nil))
   ([expr]
    `(let [initial-result# (macro-eval ~expr) ; returns {:value, :exception}
-          _# (prn "got initial result")
+          _# (prn "got initial result: " initial-result#)
           bindings# (merge
                       (local-bindings)
                       {(symbol "return") (fn [] (macro-return initial-result#))}) ; bind a fn to return the expr value
           debug-result# (break-with-window* bindings#) ; returns result or nil
-          _# (prn "got debug result")
+          _# (prn "got debug result:" debug-result#)
           result# (or debug-result# initial-result#)] ; if debug-result was provided, else original result
       (macro-return result#))))
           
@@ -391,6 +391,6 @@
   its argument or `nil` if invoked as `(break)`. If a value is provided,
   `break` will return that value and discard the provided argument."
   ([]
-   `(continue ::no-arg))
+   `(continue* ::no-arg))
   ([expr]
     `(continue* (macro-eval ~expr))))
