@@ -1,10 +1,5 @@
 (ns nightshell.debug
-  (:require [nightcode.editors :as editors]
-            [nightcode.sandbox :as sandbox]
-            [nightcode.shortcuts :as shortcuts]
-            [nightcode.ui :as ui]
-            [nightcode.utils :as utils]
-            [nightshell.redl :as redl]
+  (:require [nightshell.redl :as redl]
             [nightshell.userspace :as user]
             [clojure.core.async :as async]
             [seesaw.core :as s]))

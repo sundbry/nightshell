@@ -1,11 +1,9 @@
 (ns nightshell.redl
-  (:require reply.hacks.printing
-            [clojure.string :as str]
+  (:require reply.hacks.printing 
             [clojure.core.async :as async]
             clojure.stacktrace
             clj-stacktrace.repl) 
-  (:use [clojure.repl :only [pst]]
-        [complete.core :only [top-level-classes nested-classes]]
+  (:use [clojure.repl :only [pst]] 
         [clojure.pprint :only [pprint]]))
 
 (def spawn-repl-window (atom nil))
