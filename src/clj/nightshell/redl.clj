@@ -1,6 +1,5 @@
 (ns nightshell.redl
-  (:require reply.hacks.printing 
-            [clojure.core.async :as async]
+  (:require [clojure.core.async :as async]
             clojure.stacktrace
             clj-stacktrace.repl) 
   (:use [clojure.repl :only [pst]] 
@@ -70,7 +69,7 @@
               *2 (:*2 state)
               *3 (:*3 state)
               *e (:*e state)]
-      (with-redefs [clojure.core/print-sequential reply.hacks.printing/print-sequential
+      (with-redefs [;clojure.core/print-sequential reply.hacks.printing/print-sequential
                     clojure.repl/pst clj-stacktrace.repl/pst] 
         (let [ex (atom nil)
               repl-thread (atom (Thread/currentThread))

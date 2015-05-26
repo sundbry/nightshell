@@ -1,13 +1,13 @@
-(ns nightshell.userspace
+#_(ns nightshell.userspace
   (:require 
     [leiningen.core.project :as core-project]
     [leiningen.core.classpath :refer [get-classpath]]))
 
-(defn project
+#_(defn project
   []
   (core-project/read))
 
-(defn initializer! 
+#_(defn initializer! 
   [proj]
   (let [main-ns (:main proj)]
     (fn []

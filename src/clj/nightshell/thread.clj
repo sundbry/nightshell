@@ -1,5 +1,4 @@
-(ns nightshell.thread
-  (:require [nightcode.utils :as utils]))
+(ns nightshell.thread)
 
 (defn redirect-io
   [[in out] func]
@@ -14,8 +13,7 @@
                    (try
                      (func)
                      (catch Exception e 
-                       (when (utils/read-pref :print-stack-traces true)
-                         (.printStackTrace e))
+                       (.printStackTrace e)
                        (some-> (.getMessage e) println))))]
     (let [thread (Thread. (fn [] (redirect-io in-out catcher)))]
       (.start thread)

@@ -1,19 +1,14 @@
 (ns nightshell.seesaw
   (:require    
-     [nightcode.customizations :as custom]
-     [nightcode.editors :as editors]
-     [nightcode.shortcuts :as shortcuts]
-     [nightcode.ui :as ui]
-     [nightcode.sandbox :as sandbox]
-     [nightcode.window :as window]
-     [nightshell.thread :refer [start-thread!]]
-     [nightcode.utils :as utils]
-     [nightshell.debug :as debug]
-     [seesaw.core :as s]
-     [clj-stacktrace.core :refer [parse-trace-elem]]
-     [clj-stacktrace.repl :refer [pst-elem-str source-str method-str]])
-  (:import
-    [nightcode.ui JConsole]))
+    [seesaw.core :as s]
+    [clj-stacktrace.core :refer [parse-trace-elem]]
+    [clj-stacktrace.repl :refer [pst-elem-str source-str method-str]]
+    [nightshell.thread :refer [start-thread!]]
+    [nightshell.debug :as debug]
+    [nightshell.seesaw.editors :as editors]
+    [nightshell.seesaw.ui :as ui]
+    [nightshell.seesaw.utils :as utils]
+    [nightshell.seesaw.window :as window]))
 
 (defn- get-console-text-area
   [console]
@@ -61,21 +56,14 @@
                 (s/request-focus! (get-console-text-area console))
                 (run-repl! (ui/get-io console) repl-handle repl-terminate-callback))]
     ; start the repl
-    (run!)
-    ; create a shortcut to restart the repl
-    (when-not (sandbox/get-dir)
-      (shortcuts/create-hints! pane)
-      (shortcuts/create-mappings! pane {:repl-console run!}))))
+    (run!)))
 
 (defn create-break-window
   [repl-handle stack-pane repl-pane]
   (let [frame (s/frame :title "Nightshell [breakpoint]"
                        :content (s/top-bottom-split stack-pane repl-pane)
                        :on-close :nothing ; can not close break point windows
-                       :size [800 :by 300])]
-    (doto frame
-      window/enable-full-screen!
-      window/add-listener!)
+                       :size [800 :by 300])] 
     frame))
 
 (defn spawn-break-window
@@ -96,25 +84,13 @@
                        :content repl-pane
                        :on-close :exit ; can not close break point windows
                        :size [800 :by 600])]
-    (doto frame
-      ; set various window properties
-      window/enable-full-screen!
-      window/add-listener!)
     frame))
 
 (defn spawn-root-window
   [args]
-    ; listen for keys while modifier is down
-  (shortcuts/listen-for-shortcuts!
-    (fn [key-code]
-      (case key-code
-        ; Q
-        81 (window/confirm-exit-app!)
-        ; else
-        false)))
   ; this will give us a nice dark theme by default, or allow a lighter theme
   ; by adding "-s light" to the command line invocation
-  (window/set-theme! (custom/parse-args args))
+  (window/set-theme! {})
   (let [console (editors/create-console "clj")
         repl-pane (create-repl-pane console)
         win (create-root-window repl-pane)]

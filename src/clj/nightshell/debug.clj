@@ -1,6 +1,6 @@
 (ns nightshell.debug
   (:require [nightshell.redl :as redl]
-            [nightshell.userspace :as user]
+            ;[nightshell.userspace :as userspace]
             [clojure.core.async :as async]
             [seesaw.core :as s]))
 
@@ -60,6 +60,13 @@
       outer-repl)))
 
 (defn repl
+  "Start a debug repl"
+  []
+  (let [main-ns 'user 
+        handle (redl/make-repl main-ns)]
+    (attach-repl handle)))
+
+#_(defn project-repl
   "Start a debug repl"
   []
   (let [project (user/project)
