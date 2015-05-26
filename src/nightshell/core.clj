@@ -17,7 +17,6 @@
   (enable)
   (spawn-root-window args))
 
-
 (defmacro macro-eval
   [expr]
   `(try 
@@ -31,6 +30,12 @@
   `(if (some? (:exception ~result))
             (throw (:exception ~result))
             (:value ~result)))
+
+(defmacro local-bindings
+  "Produces a map of the names of local bindings to their values."
+  []
+  (let [symbols (keys &env)]
+    (zipmap (map (fn [sym] `(quote ~sym)) symbols) symbols)))
 
 (defmacro break
   "Invoke this to drop into a new sub-repl. It will automatically capture

@@ -40,13 +40,6 @@
 ;This var is used by the eval-with-locals subsystem
 (declare ^:dynamic *locals*)
 
-;The next 3 functions were borrowd from GeorgeJahad's debug-repl
-(defmacro local-bindings
-  "Produces a map of the names of local bindings to their values."
-  []
-  (let [symbols (keys &env)]
-    (zipmap (map (fn [sym] `(quote ~sym)) symbols) symbols)))
-
 (defn view-locals
   []
   *locals*)
