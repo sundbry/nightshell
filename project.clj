@@ -1,4 +1,4 @@
-(defproject sundbry/nightshell "0.1.1-SNAPSHOT"
+(defproject sundbry/nightshell "0.1.2-SNAPSHOT"
   :description "A debug repl derived from Nightcode and REDL"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
