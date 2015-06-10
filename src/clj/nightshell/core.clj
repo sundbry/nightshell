@@ -59,8 +59,7 @@
    `(let [initial-result# (macro-eval ~expr) ; returns {:value, :exception}
           bindings# (merge
                       (local-bindings)
-                      {(symbol "return") (fn [] (macro-return initial-result#))
-                       (symbol "continue") continue}) ; bind a fn to return the expr value
+                      {(symbol "return") (fn [] (macro-return initial-result#))}) ; bind a fn to return the expr value
           debug-result# (redl/break-with-window* bindings#) ; returns result or nil
           result# (or debug-result# initial-result#)] ; if debug-result was provided, else original result
       (macro-return result#))))
