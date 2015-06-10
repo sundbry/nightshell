@@ -6,6 +6,7 @@
         [clojure.pprint :only [pprint]]))
 
 (def spawn-repl-window (atom nil))
+(def no-arg ::no-arg)
 
 #_(defn dbg
   [& vals]
@@ -324,7 +325,7 @@
                          locals)]
         (break-interact break-repl (thread-context (Thread/currentThread)))
         (let [result (async/<!! *repl-continue*)]    
-          (when-not (= ::no-arg result)
+          (when-not (= no-arg result)
             ; return nil iff no result from user interaction
             result))))))
 

@@ -31,6 +31,17 @@
             (throw (:exception ~result))
             (:value ~result)))
 
+(defmacro continue
+  "Invoke this from inside a debug repl to return up a level.
+  
+  If no value is provided, the corresponding `(break argument)` will return
+  its argument or `nil` if invoked as `(break)`. If a value is provided,
+  `break` will return that value and discard the provided argument."
+  ([]
+   `(redl/continue* redl/no-arg))
+  ([expr]
+    `(redl/continue* (macro-eval ~expr))))
+
 (defmacro local-bindings
   "Produces a map of the names of local bindings to their values."
   []
@@ -48,10 +59,16 @@
    `(let [initial-result# (macro-eval ~expr) ; returns {:value, :exception}
           bindings# (merge
                       (local-bindings)
-                      {(symbol "return") (fn [] (macro-return initial-result#))}) ; bind a fn to return the expr value
+                      {(symbol "return") (fn [] (macro-return initial-result#))
+                       (symbol "continue") continue}) ; bind a fn to return the expr value
           debug-result# (redl/break-with-window* bindings#) ; returns result or nil
           result# (or debug-result# initial-result#)] ; if debug-result was provided, else original result
       (macro-return result#))))
+
+(defn breakpoint
+  "Break wrapped in a function."
+  ([] (break))
+  ([value] (break value)))
           
 (defmacro catch-break
   "Invoke break only if we catch an exception on the forms"
@@ -59,14 +76,3 @@
   `(try ~@forms
     (catch Throwable e#
       (break (throw e#)))))
-
-(defmacro continue
-  "Invoke this from inside a debug repl to return up a level.
-  
-  If no value is provided, the corresponding `(break argument)` will return
-  its argument or `nil` if invoked as `(break)`. If a value is provided,
-  `break` will return that value and discard the provided argument."
-  ([]
-   `(redl/continue* ::no-arg))
-  ([expr]
-    `(redl/continue* (macro-eval ~expr))))
