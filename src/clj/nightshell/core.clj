@@ -1,6 +1,7 @@
 (ns nightshell.core
   (:require [nightshell.redl :as redl]
-            [nightshell.seesaw :refer [spawn-root-window spawn-break-window init-once]]))
+            [nightshell.seesaw :refer [spawn-root-window spawn-break-window init-once]])
+  (:gen-class))
 
 (defn enable
   []  
