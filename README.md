@@ -29,7 +29,7 @@ Include breakpoints in your code.
   (nightshell.core/break "Bar!"))
 ```
 
-When a breakpoint is encountered, an interactive REPL window will pop up. You can use 
+When a breakpoint is encountered, an interactive REPL window will pop up in the same scope as the break. You can use 
 ```clj
 (return)
 ```
