@@ -5,26 +5,36 @@ A graphical debug repl derived from Nightcode and REDL
 
 ## Installation
 
-Download from git and install into your local Maven repository.
-Add it as a project dependency:
+
+Add to your ~/.lein/profiles.clj
+
 ```clj
-[sundbry/nightshell "0.1.0-SNAPSHOT"] 
+{:nightshell
+ {:plugins
+  []
+  :dependencies
+  [[sundbry/nightshell "0.1.4"]]
+  :injections
+  [(require 'nightshell.core)
+   (nightshell.core/enable)]
+  ; You may need to increase JVM perm space to load the classes
+  :jvm-opts ["-XX:PermSize=256m"]}}
 ```
 
 ## Usage
 
 Include breakpoints in your code.
 ```clj
-(use '[nightshell.core :only [break]])
-
 (defn foo []
-  (break "Bar!"))
+  (nightshell.core/break "Bar!"))
 ```
 
-In your REPL session,
-
+When a breakpoint is encountered, an interactive REPL window will pop up. You can use 
 ```clj
-user=> (require 'nightshell.core)
-user=> (nightshell.core/enable)
-user=> (myapp/-main)
+(return)
 ```
+to inspect the value at the breakpoint, and 
+```clj
+(nightshell.core/continue my-value)
+```
+To continue execution from the breakpoint.
