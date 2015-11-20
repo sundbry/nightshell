@@ -1,12 +1,13 @@
 nightshell
 ==========
 
-A graphical debug repl derived from Nightcode and REDL
+A graphical debug repl derived from Nightcode and REDL.
+Use it to launch breakpoints in interactive REPL windows.
 
 ## Installation
 
 
-Add to your ~/.lein/profiles.clj
+Create a :nightshell user profile in ~/.lein/profiles.clj
 
 ```clj
 {:nightshell
@@ -16,25 +17,29 @@ Add to your ~/.lein/profiles.clj
   [[sundbry/nightshell "0.1.4"]]
   :injections
   [(require 'nightshell.core)
-   (nightshell.core/enable)]
-  ; You may need to increase JVM perm space to load the classes
-  :jvm-opts ["-XX:PermSize=256m"]}}
+   (nightshell.core/enable)]}}
 ```
 
 ## Usage
 
-Include breakpoints in your code.
-```clj
-(defn foo []
-  (nightshell.core/break "Bar!"))
-```
 
-When a breakpoint is encountered, an interactive REPL window will pop up in the same scope as the break. You can use 
 ```clj
+; Enable breakpoints
+(nightshell.core/enable)
+
+; Create 
+(defn foo []
+  (nightshell.core/break (str "Hello" msg)))
+
+; Inspect the return value of a breakpoint
 (return)
-```
-to inspect the value at the breakpoint, and 
-```clj
+
+; Continue execution after a breakpoint
 (nightshell.core/continue my-value)
+
+; Disable breakpoints (useful for escaping loops)
+(nightshell.core/disable)
+
+; Catch exceptions in a breakpoint
+(nightshell.core/catch-break (throw (Exception. "Zomg!")))
 ```
-To continue execution from the breakpoint.
