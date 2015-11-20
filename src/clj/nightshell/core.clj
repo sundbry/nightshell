@@ -27,10 +27,10 @@
 
 (defmacro macro-return
   [result]
-  {:pre [(symbol? result)]} ; we enforce the precondition so it can be optimized out, instead of (let [result ...
+  {:pre [(symbol? result)]}
   `(if (some? (:exception ~result))
-            (throw (:exception ~result))
-            (:value ~result)))
+     (throw (:exception ~result))
+     (:value ~result)))
 
 (defmacro continue
   "Invoke this from inside a debug repl to return up a level.
@@ -62,7 +62,7 @@
                       (local-bindings)
                       {(symbol "return") (fn [] (macro-return initial-result#))}) ; bind a fn to return the expr value
           debug-result# (redl/break-with-window* bindings#) ; returns result or nil
-          result# (or debug-result# initial-result#)] ; if debug-result was provided, else original result
+          result# (or debug-result# initial-result#)]
       (macro-return result#))))
 
 (defn breakpoint
