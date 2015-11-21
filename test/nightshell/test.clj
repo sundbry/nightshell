@@ -1,8 +1,7 @@
 (ns nightshell.test
   (:require 
     [clojure.test :refer :all]
-    [nightshell.core]
-    [nightshell.redl :refer [break catch-break]]))
+    [nightshell.core :refer [break catch-break]]))
 
 (defn with-enabled
   [test-fn]
