@@ -14,7 +14,7 @@ Create a :nightshell user profile in ~/.lein/profiles.clj
  {:plugins
   []
   :dependencies
-  [[sundbry/nightshell "0.1.4"]]
+  [[sundbry/nightshell "0.1.5"]]
   :injections
   [(require 'nightshell.core)
    (nightshell.core/enable)]}}
@@ -48,3 +48,9 @@ Run with your nightshell profile included:
 ; Catch exceptions in a breakpoint
 (nightshell.core/catch-break (throw (Exception. "Zomg!")))
 ```
+
+## Change log
+
+#### Version 0.1.5
+- Fix error loading clojure.tools.reader
+- Upgrade dependencies
