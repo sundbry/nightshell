@@ -14,7 +14,7 @@ Create a :nightshell user profile in ~/.lein/profiles.clj
  {:plugins
   []
   :dependencies
-  [[sundbry/nightshell "0.1.5"]]
+  [[sundbry/nightshell "0.1.6"]]
   :injections
   [(require 'nightshell.core)
    (nightshell.core/enable)]}}
@@ -50,6 +50,9 @@ Run with your nightshell profile included:
 ```
 
 ## Change log
+
+#### Version 0.1.6
+- Upgrade dependencies for Clojure 1.10
 
 #### Version 0.1.5
 - Fix error loading clojure.tools.reader
