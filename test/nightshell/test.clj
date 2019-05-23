@@ -30,7 +30,7 @@
 (deftest test-catch-break-through
   (instruct "Nothing should break here.")
   (is (= 2 (+ 1 (catch-break 1))))
-  (instruct "Now things are going to start to break... (continue 1)")
+  (instruct "Now things are going to start to break... (nightshell.core/continue 1)")
   (is (= 2 (+ 1 (catch-break (throw (Exception. "You should continue with 1 here")))))))
 
 (deftest test-break-exception
